@@ -7,7 +7,7 @@ APPLICATION_NAME = "Pool games rules API"
 
 app = Flask(__name__)
 
-engine = create_engine('sqlite:///item-catalog.db')
+engine = create_engine('sqlite:///python-flask-pool-rules.db')
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
