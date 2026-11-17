@@ -1,16 +1,16 @@
 #!flask/bin/python
 import datetime
 from flask import Flask, jsonify, abort, make_response
-from flask.ext.httpauth import HTTPBasicAuth
+from flask_httpauth import HTTPBasicAuth
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import desc
 from sqlalchemy.orm.exc import NoResultFound
 
-from db_setup import Base, Team, Match
+from db_setup import Base, Category, Rule
 
-from flask.ext.cors import CORS
+from flask_cors import CORS
 
 auth = HTTPBasicAuth()
 app = Flask(__name__)
@@ -40,7 +40,7 @@ def categories_JSON():
     session.commit()
     try:
         categories = session.query(Category).all()
-    except NoResultFound, e:
+    except NoResultFound as e:
         return make_response(jsonify({'error': 'No categories were found'}), 404)
     if len(categories) == 0:
         abort(404)
@@ -55,8 +55,8 @@ def category_JSON(category_id):
     """
     session.commit()
     try:
-        category = session.query(Team).filter_by(id=category_id).one()
-    except NoResultFound, e:
+        category = session.query(Category).filter_by(id=category_id).one()
+    except NoResultFound as e:
         return make_response(jsonify({'error': 'No row was found for category_id=' + str(category_id)}), 404)
     return jsonify(Category=[category.serialize])
 
